@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Ssch\T3MailerDevelopment\Tests\Functional\EventListener;
 
 use Ssch\T3MailerDevelopment\EventListener\MessageLoggerListener;
-use Symfony\Component\Mime\RawMessage;
 use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -58,7 +57,6 @@ final class MessageLoggerListenerTest extends FunctionalTestCase
         self::assertNotEmpty($events->getMessages());
 
         $firstMessage = $events->getMessages()[0];
-        self::assertInstanceOf(RawMessage::class, $firstMessage);
         self::assertStringContainsString('Test', $firstMessage->toString());
     }
 }
