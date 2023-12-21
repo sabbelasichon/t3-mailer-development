@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\T3MailerDevelopment\EventListener;
 
+use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Message;
 use TYPO3\CMS\Core\Mail\Event\BeforeMailerSentMessageEvent;
@@ -39,11 +40,11 @@ final class EnvelopeListener
 
     public function __invoke(BeforeMailerSentMessageEvent $event): void
     {
+        $envelope = $event->getEnvelope() ?? Envelope::create($event->getMessage());
+        $message = $event->getMessage();
         if ($this->sender !== null) {
-            $event->getEnvelope()
-                ->setSender($this->sender);
+            $envelope->setSender($this->sender);
 
-            $message = $event->getMessage();
             if ($message instanceof Message) {
                 if (! $message->getHeaders()->has('Sender') && ! $message->getHeaders()->has('From')) {
                     $message->getHeaders()
@@ -53,8 +54,10 @@ final class EnvelopeListener
         }
 
         if ($this->recipients !== null) {
-            $event->getEnvelope()
-                ->setRecipients($this->recipients);
+            $envelope->setRecipients($this->recipients);
         }
+
+        $event->setMessage($message);
+        $event->setEnvelope($envelope);
     }
 }

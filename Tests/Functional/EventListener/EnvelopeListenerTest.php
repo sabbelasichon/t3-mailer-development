@@ -11,14 +11,14 @@ declare(strict_types=1);
 
 namespace Ssch\T3MailerDevelopment\Tests\Functional\EventListener;
 
-use Ssch\T3MailerDevelopment\EventListener\MessageLoggerListener;
-use Symfony\Component\Mime\RawMessage;
-use TYPO3\CMS\Core\Mail\MailerInterface;
+use Symfony\Component\Mailer\SentMessage;
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-final class MessageLoggerListenerTest extends FunctionalTestCase
+final class EnvelopeListenerTest extends FunctionalTestCase
 {
     protected bool $initializeDatabase = false;
 
@@ -30,15 +30,12 @@ final class MessageLoggerListenerTest extends FunctionalTestCase
         ],
     ];
 
-    private MessageLoggerListener $subject;
-
-    private MailerInterface $mailer;
+    private Mailer $mailer;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->subject = $this->get(MessageLoggerListener::class);
-        $this->mailer = $this->get(MailerInterface::class);
+        $this->mailer = $this->get(Mailer::class);
     }
 
     public function test(): void
@@ -51,14 +48,11 @@ final class MessageLoggerListenerTest extends FunctionalTestCase
         // Act
         $this->mailer->send($message);
 
+        $sentMessage = $this->mailer->getSentMessage();
+
         // Assert
-        $events = $this->subject->getEvents();
-
-        self::assertNotEmpty($events);
-        self::assertNotEmpty($events->getMessages());
-
-        $firstMessage = $events->getMessages()[0];
-        self::assertInstanceOf(RawMessage::class, $firstMessage);
-        self::assertStringContainsString('Test', $firstMessage->toString());
+        self::assertInstanceOf(SentMessage::class, $sentMessage);
+        self::assertEquals([new Address('catchall@domain.com')], $sentMessage->getEnvelope()->getRecipients());
+        self::assertEquals(new Address('sender@domain.com'), $sentMessage->getEnvelope()->getSender());
     }
 }

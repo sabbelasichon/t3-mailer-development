@@ -9,12 +9,14 @@ declare(strict_types=1);
  * LICENSE.md file that was distributed with this source code.
  */
 
+use Ssch\T3MailerDevelopment\DependencyInjection\Compiler\MailerCompilerPass;
 use Ssch\T3MailerDevelopment\EventListener\EnvelopeListener;
 use Ssch\T3MailerDevelopment\EventListener\MessageLoggerListener;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use TYPO3\CMS\Core\Mail\Event\AfterMailerSentMessageEvent;
 use TYPO3\CMS\Core\Mail\Event\BeforeMailerSentMessageEvent;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\abstract_arg;
 
 return static function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void {
     $services = $containerConfigurator->services();
@@ -28,7 +30,11 @@ return static function (ContainerConfigurator $containerConfigurator, ContainerB
     $services->set(MessageLoggerListener::class)->tag('event.listener', [
         'event' => AfterMailerSentMessageEvent::class,
     ]);
-    $services->set(EnvelopeListener::class)->tag('event.listener', [
-        'event' => BeforeMailerSentMessageEvent::class,
-    ]);
+    $services->set(EnvelopeListener::class)
+        ->args([abstract_arg('sender'), abstract_arg('recipients')])
+        ->tag('event.listener', [
+            'event' => BeforeMailerSentMessageEvent::class,
+        ]);
+
+    $containerBuilder->addCompilerPass(new MailerCompilerPass());
 };
