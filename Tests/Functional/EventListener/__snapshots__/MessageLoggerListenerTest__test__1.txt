@@ -1,0 +1,10 @@
+To: max.mustermann@domain.com
+From: no-reply@t3-mailer-development-web
+X-Mailer: TYPO3
+MIME-Version: 1.0
+Date: Thu, 21 Dec 2023 17:29:53 +0000
+Message-ID: <4374eff01b01af5e926b0dc8d7634cd3@t3-mailer-development-web>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Test
