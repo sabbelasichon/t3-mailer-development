@@ -26,15 +26,23 @@ final class EnvelopeListener
     private ?array $recipients = null;
 
     /**
+     * @var Address[]
+     */
+    private array $whiteListRecipients = [];
+
+    /**
      * @param array<int, string> $recipients
      */
-    public function __construct(string $sender = null, array $recipients = null)
+    public function __construct(string $sender = null, array $recipients = null, array $whiteListRecipients = null)
     {
         if ($sender !== null) {
             $this->sender = Address::create($sender);
         }
         if ($recipients !== null) {
             $this->recipients = Address::createArray($recipients);
+        }
+        if ($whiteListRecipients !== null) {
+            $this->whiteListRecipients = Address::createArray($whiteListRecipients);
         }
     }
 
@@ -53,8 +61,31 @@ final class EnvelopeListener
             }
         }
 
-        if ($this->recipients !== null) {
-            $envelope->setRecipients($this->recipients);
+        $allowedRecipients = [];
+        $notAllowedRecipients = [];
+        if ($this->whiteListRecipients !== []) {
+            foreach ($envelope->getRecipients() as $recipient) {
+                foreach ($this->whiteListRecipients as $whiteListRecipient) {
+                    if ($whiteListRecipient->getAddress() === $recipient->getAddress()) {
+                        $allowedRecipients[] = $recipient;
+                    } else {
+                        $notAllowedRecipients[] = $recipient;
+                    }
+                }
+            }
+        }
+
+        $recipients = [];
+        if ($notAllowedRecipients !== [] && $this->recipients !== null) {
+            $recipients = array_merge($recipients, $this->recipients);
+        }
+
+        if ($allowedRecipients !== []) {
+            $recipients = array_merge($recipients, $allowedRecipients);
+        }
+
+        if ($recipients !== []) {
+            $envelope->setRecipients($recipients);
         }
 
         $event->setMessage($message);

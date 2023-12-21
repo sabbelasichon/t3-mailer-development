@@ -15,7 +15,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class MailerConfiguration
 {
-    public function __construct(
+    private function __construct(
         private readonly ?string $sender = null,
         private readonly ?array $recipients = null,
         private readonly ?array $whitelistRecipients = null

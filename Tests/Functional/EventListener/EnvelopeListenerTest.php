@@ -33,6 +33,7 @@ final class EnvelopeListenerTest extends FunctionalTestCase
             't3_mailer_development' => [
                 'sender' => 'sender@domain.com',
                 'recipients' => 'catchall@domain.com',
+                'whiteListRecipients' => 'max.mustermann@domain.com',
             ],
         ],
     ];
@@ -50,6 +51,7 @@ final class EnvelopeListenerTest extends FunctionalTestCase
         // Arrange
         $message = GeneralUtility::makeInstance(MailMessage::class);
         $message->addTo('max.mustermann@domain.com');
+        $message->addTo('some.mustermann@domain.com');
         $message->text('Test');
 
         $envelope = Envelope::create($message);
@@ -61,7 +63,11 @@ final class EnvelopeListenerTest extends FunctionalTestCase
 
         // Assert
         self::assertInstanceOf(SentMessage::class, $sentMessage);
-        self::assertEquals([new Address('catchall@domain.com')], $sentMessage->getEnvelope()->getRecipients());
+        self::assertEquals(
+            [new Address('catchall@domain.com'), new Address('max.mustermann@domain.com')],
+            $sentMessage->getEnvelope()
+                ->getRecipients()
+        );
         self::assertEquals(new Address('sender@domain.com'), $sentMessage->getEnvelope()->getSender());
     }
 }

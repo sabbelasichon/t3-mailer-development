@@ -40,6 +40,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             expr("service('t3_mailer_development.configuration').getSender()"),
             expr("service('t3_mailer_development.configuration').getRecipients()"),
+            expr("service('t3_mailer_development.configuration').getWhitelistRecipients()"),
         ])
         ->tag('event.listener', [
             'event' => BeforeMailerSentMessageEvent::class,
