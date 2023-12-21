@@ -24,8 +24,7 @@
     "saschaegerer/phpstan-typo3": "^1.8",
     "phpstan/extension-installer": "^1.2",
     "typo3/testing-framework": "^7.0",
-    "phpstan/phpstan-phpunit": "^1.3",
-    "spatie/phpunit-snapshot-assertions": "^5.1"
+    "phpstan/phpstan-phpunit": "^1.3"
   },
   "replace": {
     "typo3-ter/t3-mailer-developement": "self.version"

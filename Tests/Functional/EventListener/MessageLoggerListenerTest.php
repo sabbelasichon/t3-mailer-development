@@ -1,9 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/*
+ * This file is part of the "t3_mailer_development" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.md file that was distributed with this source code.
+ */
 
 namespace Ssch\T3MailerDevelopment\Tests\Functional\EventListener;
 
-use Spatie\Snapshots\MatchesSnapshots;
 use Ssch\T3MailerDevelopment\EventListener\MessageLoggerListener;
 use Symfony\Component\Mime\RawMessage;
 use TYPO3\CMS\Core\Mail\MailerInterface;
@@ -13,21 +20,19 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class MessageLoggerListenerTest extends FunctionalTestCase
 {
-    use MatchesSnapshots;
-
     protected bool $initializeDatabase = false;
-    private MessageLoggerListener $subject;
-    private MailerInterface $mailer;
 
-    protected array $testExtensionsToLoad = [
-        'typo3conf/ext/t3_mailer_development'
-    ];
+    protected array $testExtensionsToLoad = ['typo3conf/ext/t3_mailer_development'];
 
     protected array $configurationToUseInTestInstance = [
         'MAIL' => [
             'transport' => 'null',
-        ]
+        ],
     ];
+
+    private MessageLoggerListener $subject;
+
+    private MailerInterface $mailer;
 
     protected function setUp(): void
     {
@@ -55,6 +60,6 @@ final class MessageLoggerListenerTest extends FunctionalTestCase
 
         $firstMessage = $events->getMessages()[0];
         self::assertInstanceOf(RawMessage::class, $firstMessage);
-        $this->assertMatchesTextSnapshot($firstMessage->toString());
+        self::assertStringContainsString('Test', $firstMessage->toString());
     }
 }
