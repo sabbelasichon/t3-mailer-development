@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\T3MailerDevelopment\Tests\Functional\EventListener;
 
+use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\Mailer;
@@ -45,8 +46,10 @@ final class EnvelopeListenerTest extends FunctionalTestCase
         $message->addTo('max.mustermann@domain.com');
         $message->text('Test');
 
+        $envelope = Envelope::create($message);
+
         // Act
-        $this->mailer->send($message);
+        $this->mailer->send($message, $envelope);
 
         $sentMessage = $this->mailer->getSentMessage();
 
