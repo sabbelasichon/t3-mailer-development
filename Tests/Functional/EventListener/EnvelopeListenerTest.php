@@ -29,6 +29,12 @@ final class EnvelopeListenerTest extends FunctionalTestCase
         'MAIL' => [
             'transport' => 'null',
         ],
+        'EXTENSIONS' => [
+            't3_mailer_development' => [
+                'sender' => 'sender@domain.com',
+                'recipients' => 'catchall@domain.com',
+            ],
+        ],
     ];
 
     private Mailer $mailer;

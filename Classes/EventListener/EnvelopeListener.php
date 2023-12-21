@@ -26,9 +26,9 @@ final class EnvelopeListener
     private ?array $recipients = null;
 
     /**
-     * @param array<Address|string> $recipients
+     * @param array<int, string> $recipients
      */
-    public function __construct(Address|string $sender = null, array $recipients = null)
+    public function __construct(string $sender = null, array $recipients = null)
     {
         if ($sender !== null) {
             $this->sender = Address::create($sender);
