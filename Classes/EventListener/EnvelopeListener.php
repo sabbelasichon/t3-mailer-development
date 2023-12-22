@@ -32,6 +32,7 @@ final class EnvelopeListener
 
     /**
      * @param array<int, string> $recipients
+     * @param array<int, string> $whiteListRecipients
      */
     public function __construct(string $sender = null, array $recipients = null, array $whiteListRecipients = null)
     {

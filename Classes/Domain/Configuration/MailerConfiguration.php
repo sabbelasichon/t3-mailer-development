@@ -15,6 +15,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class MailerConfiguration
 {
+    /**
+     * @param array<int, string>|null $recipients
+     * @param array<int, string>|null $whitelistRecipients
+     */
     private function __construct(
         private readonly ?string $sender = null,
         private readonly ?array $recipients = null,
@@ -27,11 +31,17 @@ final class MailerConfiguration
         return $this->sender;
     }
 
+    /**
+     * @return string[]|null
+     */
     public function getRecipients(): ?array
     {
         return $this->recipients;
     }
 
+    /**
+     * @return string[]|null
+     */
     public function getWhitelistRecipients(): ?array
     {
         return $this->whitelistRecipients;
