@@ -50,15 +50,24 @@ final class MailerConfiguration
     public static function fromArray(mixed $mailerConfiguration): self
     {
         $recipients = $mailerConfiguration['recipients'] ?? null;
-        if (is_string($recipients)) {
+        if (is_string($recipients) && $recipients !== '') {
             $recipients = GeneralUtility::trimExplode(',', $recipients, true);
+        } else {
+            $recipients = null;
         }
 
         $whitelistRecipients = $mailerConfiguration['whiteListRecipients'] ?? null;
-        if (is_string($whitelistRecipients)) {
+        if (is_string($whitelistRecipients) && $whitelistRecipients !== '') {
             $whitelistRecipients = GeneralUtility::trimExplode(',', $whitelistRecipients, true);
+        } else {
+            $whitelistRecipients = null;
+        }
+        $sender = $mailerConfiguration['sender'] ?? null;
+
+        if ($sender === '') {
+            $sender = null;
         }
 
-        return new self($mailerConfiguration['sender'] ?? null, $recipients, $whitelistRecipients);
+        return new self($sender, $recipients, $whitelistRecipients);
     }
 }
