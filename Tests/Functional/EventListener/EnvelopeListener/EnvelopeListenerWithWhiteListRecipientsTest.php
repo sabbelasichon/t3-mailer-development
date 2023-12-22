@@ -9,42 +9,26 @@ declare(strict_types=1);
  * LICENSE.md file that was distributed with this source code.
  */
 
-namespace Ssch\T3MailerDevelopment\Tests\Functional\EventListener;
+namespace Ssch\T3MailerDevelopment\Tests\Functional\EventListener\EnvelopeListener;
 
 use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mime\Address;
-use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-final class EnvelopeListenerTest extends FunctionalTestCase
+final class EnvelopeListenerWithWhiteListRecipientsTest extends AbstractEnvelopeListenerTestCase
 {
-    protected bool $initializeDatabase = false;
-
-    protected array $testExtensionsToLoad = ['typo3conf/ext/t3_mailer_development'];
-
     protected array $configurationToUseInTestInstance = [
         'MAIL' => [
             'transport' => 'null',
         ],
         'EXTENSIONS' => [
             't3_mailer_development' => [
-                'sender' => 'sender@domain.com',
-                'recipients' => 'catchall@domain.com',
                 'whiteListRecipients' => 'max.mustermann@domain.com',
             ],
         ],
     ];
-
-    private Mailer $mailer;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->mailer = $this->get(Mailer::class);
-    }
 
     public function test(): void
     {
@@ -64,10 +48,10 @@ final class EnvelopeListenerTest extends FunctionalTestCase
         // Assert
         self::assertInstanceOf(SentMessage::class, $sentMessage);
         self::assertEquals(
-            [new Address('catchall@domain.com'), new Address('max.mustermann@domain.com')],
+            [new Address('max.mustermann@domain.com')],
             $sentMessage->getEnvelope()
                 ->getRecipients()
         );
-        self::assertEquals(new Address('sender@domain.com'), $sentMessage->getEnvelope()->getSender());
+        self::assertEquals(new Address('no-reply@t3-mailer-development-web'), $sentMessage->getEnvelope()->getSender());
     }
 }

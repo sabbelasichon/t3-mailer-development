@@ -86,6 +86,8 @@ final class EnvelopeListener
 
         if ($recipients !== []) {
             $envelope->setRecipients($recipients);
+        } elseif ($this->recipients !== null) {
+            $envelope->setRecipients($this->recipients);
         }
 
         $event->setMessage($message);
