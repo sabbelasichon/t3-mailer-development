@@ -33,7 +33,7 @@ final class EnvelopeListenerWithWhiteListRecipientsAndRecipientsTest extends Fun
             't3_mailer_development' => [
                 'sender' => 'sender@domain.com',
                 'recipients' => 'catchall@domain.com',
-                'whiteListRecipients' => 'max.mustermann@domain.com',
+                'whiteListRecipients' => '#max.mustermann@domain.com#',
             ],
         ],
     ];

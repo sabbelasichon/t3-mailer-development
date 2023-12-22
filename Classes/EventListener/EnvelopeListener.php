@@ -26,7 +26,7 @@ final class EnvelopeListener
     private ?array $recipients = null;
 
     /**
-     * @var Address[]
+     * @var array<int, string>
      */
     private array $whiteListRecipients = [];
 
@@ -43,7 +43,7 @@ final class EnvelopeListener
             $this->recipients = Address::createArray($recipients);
         }
         if ($whiteListRecipients !== null) {
-            $this->whiteListRecipients = Address::createArray($whiteListRecipients);
+            $this->whiteListRecipients = $whiteListRecipients;
         }
     }
 
@@ -67,7 +67,7 @@ final class EnvelopeListener
         if ($this->whiteListRecipients !== []) {
             foreach ($envelope->getRecipients() as $recipient) {
                 foreach ($this->whiteListRecipients as $whiteListRecipient) {
-                    if ($whiteListRecipient->getAddress() === $recipient->getAddress()) {
+                    if (preg_match($whiteListRecipient, $recipient->getAddress()) === 1) {
                         $allowedRecipients[] = $recipient;
                     } else {
                         $notAllowedRecipients[] = $recipient;

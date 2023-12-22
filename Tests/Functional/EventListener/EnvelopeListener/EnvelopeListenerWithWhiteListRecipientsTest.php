@@ -25,7 +25,7 @@ final class EnvelopeListenerWithWhiteListRecipientsTest extends AbstractEnvelope
         ],
         'EXTENSIONS' => [
             't3_mailer_development' => [
-                'whiteListRecipients' => 'max.mustermann@domain.com',
+                'whiteListRecipients' => '#max.*@domain.com#',
             ],
         ],
     ];
