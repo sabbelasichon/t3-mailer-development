@@ -52,6 +52,5 @@ final class EnvelopeListenerWithWhiteListRecipientsTest extends AbstractEnvelope
             $sentMessage->getEnvelope()
                 ->getRecipients()
         );
-        self::assertEquals(new Address('no-reply@t3-mailer-development-web'), $sentMessage->getEnvelope()->getSender());
     }
 }

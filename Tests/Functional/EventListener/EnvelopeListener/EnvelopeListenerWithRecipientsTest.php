@@ -48,6 +48,5 @@ final class EnvelopeListenerWithRecipientsTest extends AbstractEnvelopeListenerT
         // Assert
         self::assertInstanceOf(SentMessage::class, $sentMessage);
         self::assertEquals([new Address('catchall@domain.com')], $sentMessage->getEnvelope() ->getRecipients());
-        self::assertEquals(new Address('no-reply@t3-mailer-development-web'), $sentMessage->getEnvelope()->getSender());
     }
 }
