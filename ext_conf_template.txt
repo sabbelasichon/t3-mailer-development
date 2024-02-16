@@ -1,6 +1,6 @@
-# type=string; Allow sending mails only to this address(es). Must be a regular expression string. Comma separated list
+# cat=basic; type=string; label=Allow sending mails only to this address(es). Must be a regular expression string. Comma separated list
 whiteListRecipients =
-# type=string; Send all mails to this address(es). Comma separated list
+# cat=basic; type=string; label=Send all mails to this address(es). Comma separated list
 recipients =
-# type=string; Global sender
+# cat=basic; type=string; label=Global sender
 sender =
